@@ -8,9 +8,11 @@ import time
 import sys 
 
 #Personal stuff
-from MotionDetection import WaitForStill
-import HX711
+from lib.MotionDetection import WaitForStill
+import lib.HX711 as HX711
+from lib.lcd import *
 
+startup_lcd()
 #we use the BCM numbering for ease of use.
 GPIO.setmode(GPIO.BCM)
 
@@ -44,8 +46,10 @@ cv2.resizeWindow('dst_rt', window_width, window_height)
         
 while True:
     print "Waiting for change in weight"
+    waiting_lcd()
     weight = hx.wait_for_delta(WEIGHT_STD,MOT_ANALYSIS_INT);
     print "Detected weight: ", weight
+    detected_lcd()
     if abs(weight) > WEIGHT_STD:
         print "Waiting for motion to finish"
         WaitForStill(0, MOT_ANALYSIS_INT, MOT_MAX)

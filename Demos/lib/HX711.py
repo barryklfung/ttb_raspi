@@ -16,7 +16,7 @@ class HX711:
         self.REFERENCE_UNIT = 1  # The value returned by the hx711 that corresponds to your reference unit AFTER dividing by the SCALE.
         
         self.OFFSET = 1
-        self.lastVal = long(0)
+        self.lastVal = 0
 
         self.LSByte = [2, -1, -1]
         self.MSByte = [0, 3, 1]
@@ -112,10 +112,10 @@ class HX711:
         np_arr32 = np_arr8.view('uint32')
         self.lastVal = np_arr32
 
-        return long(self.lastVal)
+        return self.lastVal
 
     def read_average(self, times=3):
-        values = long(0)
+        values = 0
         for i in range(times):
             values += self.read_long()
 
@@ -181,7 +181,7 @@ class HX711:
             self.reset()
             val = self.get_weight()
             if abs(val-lastval)>delta:
-                print "lastval", lastval, "val", val
+                print("lastval", lastval, "val", val)
                 time.sleep(period)
                 self.reset()
                 return self.get_weight()
@@ -194,7 +194,7 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
 
     hx = HX711(20,21,32)
-    hx.set_reference_unit(700)
+    hx.set_reference_unit(75)
     time.sleep(1)
     hx.reset()
     hx.tare(3)
@@ -205,7 +205,7 @@ if __name__ == "__main__":
             print('Trying to get working')
             val = hx.get_weight()
             print(val)
-            if val > 100:
+            if val > 10000:
                 print("OH NO")
             hx.power_down()
             time.sleep(1)

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import picamera
 import picamera.array
@@ -7,7 +8,7 @@ import picamera
 
 #parameters
 MotionMax = 60
-AnalysisInterval = 0.5 #seconds
+AnalysisInterval = 0.1 #seconds
 InitialDelay = 1 #second
 
 class DetectMotion(picamera.array.PiMotionAnalysis):
@@ -46,15 +47,15 @@ def WaitForStill(InitialDelay,AnalysisInterval,MotionMax):
         # record video to nowhere, as we are just trying to capture images:
         camera.start_recording('/dev/null', format='h264', motion_output=output)
         while not output.WasStill():
-            camera.wait_recording(1)
+            camera.wait_recording(AnalysisInterval)
         camera.stop_recording()
         output.resetStill()
     camera.close()
 if __name__ == "__main__":
     filename = open('testimage.jpg','wb')
-    print "Testing waiting module. Time is", datetime.datetime.now()
+    print("Testing waiting module. Time is", datetime.datetime.now())
     WaitForStill(InitialDelay, AnalysisInterval, MotionMax)
     camera = picamera.PiCamera()
     camera.capture(filename)
-    print "It's still. Time is", datetime.datetime.now()
+    print("It's still. Time is", datetime.datetime.now())
     filename.close()
