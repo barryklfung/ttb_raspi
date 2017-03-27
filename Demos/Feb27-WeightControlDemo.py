@@ -17,8 +17,8 @@ startup_lcd()
 GPIO.setmode(GPIO.BCM)
 
 #Parameters
-WEIGHT_STD = 0.6 #our tolerance for what is a steady object.
-REF_UNITS = 70
+WEIGHT_STD = 6 #our tolerance for what is a steady object.
+REF_UNITS = 75
 DOUT_PIN = 20
 SCK_PIN = 21
 
@@ -27,7 +27,7 @@ MOT_ANALYSIS_INT = 0.1 #seconds
 
 #initializing the weight sensor
 hx = HX711.HX711(20,21,32)
-hx.set_reference_unit(700)
+hx.set_reference_unit(REF_UNITS)
 time.sleep(1)
 hx.reset()
 hx.tare(3)
@@ -55,6 +55,7 @@ while True:
         WaitForStill(0, MOT_ANALYSIS_INT, MOT_MAX)
         with picamera.PiCamera() as camera:
             camera.resolution = (640, 480)
+            camera.zoom = (0.1, 0.1, 1, 0.8)
             cap = picamera.array.PiRGBArray(camera)
             camera.capture(cap,format="bgr")
             img = cap.array
